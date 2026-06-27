@@ -1,4 +1,3 @@
-
 import asyncio
 import time
 import random
@@ -27,6 +26,10 @@ class BotState:
 
 state = BotState()
 
+
+# ============================================================
+# FUNÇÃO: UPGRADE DE CAMPOS EXTERNOS
+# ============================================================
 async def upgrade_best_field(page):
     state.last_action = "Verificando campos externos"
     state.add_log(state.last_action)
@@ -84,6 +87,10 @@ async def upgrade_best_field(page):
 
     return False
 
+
+# ============================================================
+# FUNÇÃO: UPGRADE DE EDIFÍCIOS INTERNOS
+# ============================================================
 async def build_internal(page):
     state.last_action = "Verificando edifícios internos"
     state.add_log(state.last_action)
@@ -136,20 +143,24 @@ async def build_internal(page):
 
     return False
 
+
+# ============================================================
+# LOOP PRINCIPAL DO BOT — COMPATÍVEL COM RENDER
+# ============================================================
 async def bot_loop():
-    # IMPORTAÇÃO DO PLAYWRIGHT AQUI (seguro para Render)
     from playwright.async_api import async_playwright
 
     async with async_playwright() as p:
+        # Chromium configurado para Render Free
         browser = await p.chromium.launch(
-    headless=True,
-    args=[
-        "--no-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu",
-        "--disable-setuid-sandbox"
-    ]
-)
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-setuid-sandbox"
+            ]
+        )
 
         context = await browser.new_context()
         await context.add_cookies(COOKIES)
@@ -170,3 +181,4 @@ async def bot_loop():
                 await build_internal(page)
 
             await asyncio.sleep(random.randint(5, 10))
+
