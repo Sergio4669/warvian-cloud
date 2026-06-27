@@ -1,1 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Painel do Bot</title>
+<style>
+body { background:#111; color:white; font-family:Arial; text-align:center; }
+button { width:90%; padding:20px; margin:10px; font-size:20px; border:none; border-radius:10px; }
+.start { background:#28a745; color:white; }
+.stop { background:#dc3545; color:white; }
+.pause { background:#ffc107; color:black; }
+.log { background:#222; padding:10px; margin-top:20px; height:200px; overflow:auto; }
+</style>
+</head>
+<body>
 
+<h1>Painel do Bot</h1>
+
+<button class="start" onclick="location.href='/start'">Iniciar</button>
+<button class="pause" onclick="location.href='/pause'">Pausar / Retomar</button>
+<button class="stop" onclick="location.href='/stop'">Parar</button>
+
+<h2>Status:</h2>
+<p>{{ state.last_action }}</p>
+
+<h2>Logs:</h2>
+<div class="log">
+{% for line in state.log %}
+    {{ line }}<br>
+{% endfor %}
+</div>
+
+</body>
+</html>
