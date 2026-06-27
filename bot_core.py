@@ -1,7 +1,7 @@
+
 import asyncio
 import time
 import random
-from playwright.async_api import async_playwright
 
 BASE = "https://s1.warvian.it/"
 
@@ -137,6 +137,9 @@ async def build_internal(page):
     return False
 
 async def bot_loop():
+    # IMPORTAÇÃO DO PLAYWRIGHT AQUI (seguro para Render)
+    from playwright.async_api import async_playwright
+
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context()
