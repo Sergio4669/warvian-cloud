@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, redirect
 import threading
 import asyncio
@@ -11,14 +12,20 @@ def painel():
 
 @app.route("/start")
 def start():
-    state.running = True
-    state.paused = False
-    state.add_log("Bot iniciado")
+    if not state.running:
+        state.running = True
+        state.paused = False
+        state.add_log("Bot iniciado")
+
+        # Inicia o bot numa thread separada
+        threading.Thread(target=lambda: asyncio.run(bot_loop()), daemon=True).start()
+
     return redirect("/")
 
 @app.route("/stop")
 def stop():
     state.running = False
+    state.paused = False
     state.add_log("Bot parado")
     return redirect("/")
 
@@ -28,9 +35,7 @@ def pause():
     state.add_log("Bot pausado/retomado")
     return redirect("/")
 
-def start_bot():
-    asyncio.run(bot_loop())
-
-threading.Thread(target=start_bot, daemon=True).start()
-
-app.run(host="0.0.0.0", port=8080)
+# IMPORTANTE: NÃO iniciar o bot automaticamente no Render
+# Apenas iniciar o Flask
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
