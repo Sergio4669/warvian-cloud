@@ -141,7 +141,16 @@ async def bot_loop():
     from playwright.async_api import async_playwright
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(
+    headless=True,
+    args=[
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--disable-setuid-sandbox"
+    ]
+)
+
         context = await browser.new_context()
         await context.add_cookies(COOKIES)
         page = await context.new_page()
